@@ -102,3 +102,68 @@ class ImmutableBaseModel(models.Model):
     class Meta:
         abstract = True
 
+
+# –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+# INVENTORY
+# –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+
+class InventoryEvent(ImmutableBaseModel):
+
+    EVENT_TYPE_CHOICES = [
+        ("PRODUCED", "Produced"),  # Positive
+        ("PLANNED", "Planned"),  # Positive
+        ("ORDERED", "Ordered"),  # Pos (vendor) / Neg (sales)
+        ("RECEIVED", "Received"),  # Positive
+        ("FULFILLED", "Fulfilled"),  # Negative
+        ("ADJUSTED", "Adjusted"),  # Pos / Neg
+        ("FORECASTED", "Forecasted"),  # Pos
+    ]
+
+    event_type = models.CharField(
+        max_length=12, choices=EVENT_TYPE_CHOICES, default="PRODUCED"
+    )
+    quantity = models.DecimalField(
+        max_digits=9,
+        decimal_places=2,
+        null=False,
+        blank=False,
+        default=0.000,
+    )
+    unit = models.ForeignKey(
+        "UnitMeasurement", on_delete=models.CASCADE, related_name="+"
+    )
+
+    class Meta:
+        ordering = ["-id"]
+        get_latest_by = ["id"]
+
+
+# –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+# UNIT OF MEASUREMENT
+# –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+
+class UnitMeasurement(AbstractBaseModel):
+    UNIT_TYPE_CHOICES = (
+        ("WEIGHT", "Weight"),
+        ("VOLUME", "Volume"),
+        ("EACH", "Each"),
+        ("MISC", "Miscellaneous"),
+        ("INVENTORY", "Inventory"),
+    )
+
+    name = models.CharField("Name", max_length=32, null=False, unique=True)
+    symbol = models.CharField("Symbol", max_length=9, null=False)
+    unit_type = models.CharField(
+        "Type", max_length=12, choices=UNIT_TYPE_CHOICES, default="WEIGHT"
+    )
+
+    def __str__(self):
+        return str(self.name)
+
+    class Meta:
+        ordering = [
+            "unit_type",
+            "name",
+        ]
