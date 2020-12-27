@@ -1,0 +1,46 @@
+{% block body_block %}
+{% load static %}
+
+<!-- START – GENERIC FILTER (DROPDOWN) -->
+<div class="">
+
+    <!-- START DISPLAY -->
+    <button
+    class="max-w-xs flex items-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-300 focus:ring-white"
+    id="filter-choices-menu" aria-haspopup="true" style="transition: all 0.15s ease" type="button"
+    onclick="openDropdown(event,'filter-choices-dropdown')">
+        <span class="sr-only">Filter: {{filter_display_text}}</span>
+        <i class="material-icons text-gray-500 text-sm" style="position: relative; top: 0.1em;">filter_list</i>
+        <span class="ml-1 text-blue-500">Filter: {{filter_display_text}}</span>
+    </button>
+    <!-- END DISPLAY -->
+
+    <!-- START CHOICES -->
+    <div id="filter-choices-dropdown" 
+    class="origin-top-right absolute right-0 z-50 mt-2 p-4 py-2 w-64 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden" 
+    role="menu" aria-orientation="vertical" aria-labelledby="filter-choices-menu">
+        {% for value in labels %}
+            {% if select == value.label %}
+            {% else %}
+            <div>
+                <a class="dropdown-item text-gray-500 text-sm" href="{% url 'apps.core:list_filter_settings' model=model filter_field=field filter_value=value.label %}">
+                    {{value.display}}
+                </a>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <!-- END CHOICES -->
+
+</div>
+<!-- END GENERIC FILTER (DROPDOWN) -->
+
+{% endblock %}
+
+
+
+
+
+
+
+ 

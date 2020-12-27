@@ -1,0 +1,25 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include "modules/site-info.html" %} 
+    {% include "modules/styles.html" %}
+  </head>
+
+  <body class="bg-gray-50">
+    {% include "modules/header.html" %}
+    <div>
+      <main>
+        <div class="max-w-7xl mx-auto py-6 lg:px-12 px-8">
+            <div class="h-96">
+              {% include "modules/messages.html" %}
+              {% block body_block %}
+              {% endblock %}
+            </div>
+        </div>
+      </main>
+    </div>
+    {% include "modules/footer.html" %}
+  </body>
+</html>

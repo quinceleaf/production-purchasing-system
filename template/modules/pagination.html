@@ -1,0 +1,101 @@
+{% load page_window %}
+
+<!-- START PAGINATION -->
+    <div class="flex md:flex-row flex-col-reverse md:justify-between justify-start md:mt-3 mt-5">
+        <div class="md:self-center md:mt-0 mt-5 text-xs text-gray-500">
+            Displaying {{data.start_index}} to {{data.end_index}}
+            of {{data.paginator.count}} total items
+            {% if filter_by != "ALL" %}
+            <span class="text-red-500 font-bold">FILTERED</span>
+            {% endif %}
+        </div>
+
+        <div>
+            <nav class="block">
+                <ul class="flex pl-0 rounded list-none flex-wrap">
+                    {% if data.has_previous %}
+                    <li>
+                        <a href="?page=1"
+                            class="first:ml-0 text-xs font-semibold flex w-8 h-8 p-0 items-center justify-center leading-tight relative border border-solid border-gray-300 border-right-0 bg-white text-blue-500 rounded-l-sm">
+                            <i class="material-icons -mr-px">first_page</i>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a disabled href="?page=1"
+                            class="first:ml-0 text-xs font-semibold flex w-8 h-8 p-0 items-center justify-center leading-tight relative border border-solid border-gray-300 border-right-0 bg-white text-blue-500 rounded-l-sm">
+                            <i class="material-icons -mr-px">first_page</i>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if data.has_previous %}
+                    <li class="-ml-px">
+                        <a href="?page={{data.previous_page_number}}"
+                            class="first:ml-0 text-xs font-semibold flex w-8 h-8 p-0 items-center justify-center leading-tight relative border border-solid border-gray-300 bg-white text-blue-500">
+                            <i class="material-icons -mr-px">chevron_left</i>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="-ml-px">
+                        <a href="?page=1"
+                            class="first:ml-0 text-xs font-semibold flex w-8 h-8 p-0 items-center justify-center leading-tight relative border border-solid border-gray-300 bg-white text-blue-500" disabled="disabled">
+                            <i class="material-icons -mr-px">chevron_left</i>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for page_number in data.number|page_window:data.paginator.num_pages  %}
+                    <li class="-ml-px">
+                        {% if page_number == data.number %}
+                        <a href="#"
+                            class="first:ml-0 text-xs font-semibold flex h-8 px-4 items-center justify-center leading-tight relative border border-solid border-gray-300 bg-white text-blue-500">
+                            Page {{data.number}} of {{data.paginator.num_pages}}
+                        </a>
+                        {% else %}
+                        <a href="?page={{page_number}}"
+                            class="first:ml-0 text-xs font-semibold flex h-8 px-4 items-center justify-center leading-tight relative border border-solid border-gray-300 bg-white text-blue-500 md:flex hidden">
+                            {{page_number}}
+                        </a>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+
+                    {% if data.has_next %}
+                    <li class="-ml-px">
+                        <a href="?page={{data.next_page_number}}"
+                            class="first:ml-0 text-xs font-semibold flex w-8 h-8 p-0 items-center justify-center leading-tight relative border border-solid border-gray-300 bg-white text-blue-500">
+                            <i class="material-icons -mr-px">chevron_right</i>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="-ml-px disabled">
+                        <a href="?page={{data.paginator.num_pages}}"
+                            class="first:ml-0 text-xs font-semibold flex w-8 h-8 p-0 items-center justify-center leading-tight relative border border-solid border-gray-300 bg-white text-blue-500">
+                            <i class="material-icons -mr-px">chevron_right</i>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% if data.has_next %}
+                    <li class="-ml-px">
+                        <a href="?page={{data.paginator.num_pages}}"
+                            class="first:ml-0 text-xs font-semibold flex w-8 h-8 p-0 items-center justify-center leading-tight relative border border-solid border-gray-300 rounded-r-sm bg-white text-blue-500">
+                            <i class="material-icons -mr-px">last_page</i>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="-ml-px disabled">
+                        <a href="?page={{data.paginator.num_pages}}"
+                            class="first:ml-0 text-xs font-semibold flex w-8 h-8 p-0 items-center justify-center leading-tight relative border border-solid border-gray-300 rounded-r-sm bg-white text-blue-500">
+                            <i class="material-icons -mr-px">last_page</i>
+                        </a>
+                    </li>
+                    {% endif %}
+
+
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <!-- END PAGINATION -->
