@@ -1,0 +1,32 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+django-admin-autocomplete-filter = "*"
+django-auditlog = "*"
+django-autocomplete-light = "==3.5.1"
+django-debug-toolbar = "*"
+django-formtools = "*"
+django-fsm = "*"
+django-fsm-log = {editable = true, git = "https://github.com/quinceleaf/django-fsm-log.git"}
+django-import-export = "*"
+django-redis = "*"
+django-simple-history = "*"
+django-widget-tweaks = "*"
+mysqlclient = "*"
+python-dotenv = "*"
+python-ulid = "*"
+pytz = "*"
+docutils = "*"
+faker = "*"
+pillow = "*"
+
+[dev-packages]
+black = "==19.10b0"
+faker = "*"
+flake8 = "*"
+
+[requires]

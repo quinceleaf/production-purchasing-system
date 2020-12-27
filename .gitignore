@@ -1,0 +1,22 @@
+# Planning
+documents
+
+# Miscellaneous
+*.pyc
+.DS_Store
+settings.json
+
+# Virtualenv
+.venv
+
+# Local development files
+docker-compose.yml
+mysql-data
+redis-data
+redis.conf
+scripts
+jstools
+clear_migrations.sh
+
+# Configuration files
+.env
