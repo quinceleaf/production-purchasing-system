@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% block body_block %}
+{% load static %}
+{% load widget_tweaks %}
+
+<title>{{page_title}}</title>
+
+<!-- START TOP PANEL -->
+<div class="mt-5">
+    <div class="flex flex-col">
+        <!-- START BREADCRUMB -->
+        <div class="text-blue-500 text-sm">
+            <a href="{% url 'apps.materials:product_list' %}">
+                <i class="material-icons text-secondary"
+                    style="font-size: 0.9em; position: relative; top: 0.1em;">navigate_before</i>
+                Products
+            </a>
+        </div>
+        <!-- END BREADCRUMB -->
+        <div class="text-2xl font-bold">{{data.name}}</div>
+        <!--  -->
+    </div>
+    <a class="text-blue-500" href="{% url 'apps.materials:product_edit' pk=data.id %}">
+        <i class="material-icons text-secondary" style="font-size: 0.9em; position: relative; top: 0.1em;">edit</i>
+        Edit Product
+    </a>
+</div>
+<!-- END TOP PANEL -->
+
+<!-- START BASIC INFO -->
+<div class="mt-5 p-6 border border-gray-300">
+    <div class="mt-0">
+        <div class="text-gray-500 text-xs">Category</div>
+        <div>{{data.get_category_display}}</div>
+    </div>
+
+    <div class="mt-5">
+        <div class="text-gray-500 text-xs">Unit of Measurement</div>
+        <div>{{data.get_unit_type_display}}</div>
+    </div>
+
+
+    <div class="mt-5">
+        <div class="text-gray-500 text-xs">UPC Code</div>
+        <div>{{data.upc_code|default_if_none:"<span class='text-black-50'><em>None assigned</em></span>"}}</div>
+    </div>
+
+    <div class="mt-5">
+        <div class="text-gray-500 text-xs">Shelf Life</div>
+        <div>{{data.shelf_life}} days</div>
+    </div>
+
+    <div class="mt-5">
+        <div class="text-gray-500 text-xs">Version</div>
+        <div>{{data.version}}</div>
+    </div>
+
+    <div class="mt-5">
+        <div class="text-gray-500 text-xs">Notes</div>
+        <div>{{data.notes|default:"<span class='text-black-50'><em>None provided</em></span>"}}</div>
+    </div>
+
+    <div class="mt-5">
+        <div class="text-gray-500 text-xs">Created</div>
+        <div>{{data.created_at}}</div>
+    </div>
+
+    <div class="mt-5">
+        <div class="text-gray-500 text-xs">Updated</div>
+        <div>{{data.updated_at}}</div>
+    </div>
+</div>
+<!-- END BASIC INFO -->
+
+<!-- START TABS -->
+<div class="flex flex-wrap mt-5" id="tabs-id">
+    <div class="w-full">
+        <!-- START TABS (DISPLAY) -->
+        <ul class="flex mb-0 list-none flex-wrap pt-3 flex-row">
+            <li class="last:mr-0 flex-auto text-center">
+                <a class="relative text-xs font-bold uppercase px-5 py-3 block leading-normal border border-gray-300 // z-30 border-b-0 bg-white text-blue-300 -mb-px"
+                    onclick="changeActiveTab(event,'tab-boms')">
+                    Bills of Materials
+                </a>
+            </li>
+            <li class="last:mr-0 flex-auto text-center">
+                <a class="relative text-xs font-bold uppercase px-5 py-3 block leading-normal border border-gray-300 // bg-gray-50 text-gray-300"
+                    onclick="changeActiveTab(event,'tab-characteristics')">
+                    Characteristics
+                </a>
+            </li>
+            <li class=" last:mr-0 flex-auto text-center">
+                <a class="relative text-xs font-bold uppercase px-5 py-3 block leading-normal border border-gray-300  // bg-gray-50 text-gray-300"
+                    onclick="changeActiveTab(event,'tab-history')">
+                    {% if data.category == "FINISHED" %}Sales{% else %}Production{% endif %} History
+                </a>
+            </li>
+            <li class="last:mr-0 flex-auto text-center">
+                <a class="relative text-xs font-bold uppercase px-5 py-3 block leading-normal border border-gray-300 // bg-gray-50 text-gray-300"
+                    onclick="changeActiveTab(event,'tab-inventory')">
+                    Inventory
+                </a>
+            </li>
+            <li class="last:mr-0 flex-auto text-center">
+                <a class="relative text-xs font-bold uppercase px-5 py-3 block leading-normal border border-gray-300 // bg-gray-50 text-gray-300"
+                    onclick="changeActiveTab(event,'tab-accounting')">
+                    Accounting
+                </a>
+            </li>
+        </ul>
+        <!-- END TABS (DISPLAY) -->
+        <!-- START TABS (CONTENT) -->
+        <div
+            class="relative flex flex-col min-w-0 w-full break-words z-10 bg-white mb-0 border border-t-0 border-gray-300 ">
+            <div class="px-4 py-5 flex-auto">
+                <div class="tab-content tab-space">
+                    <div class="block" id="tab-boms">
+                    <!-- START TOP PANEL -->
+                        {% if data.bills_of_materials.count > 0 %}
+                            <a href="{% url 'apps.production:bill_of_materials_detail' pk=data.bills_of_materials.latest.id %}">
+                                <i class="material-icons text-secondary" style="font-size: 0.9em; position: relative; top: 0.1em;">edit</i>
+                                View/Edit Latest Bill of Materials
+                            </a>
+                        {% else %}
+                            <a href="{% url 'apps.production:bill_of_materials_wizard' pk=data.id %}">
+                                <i class="material-icons text-secondary" style="font-size: 0.9em; position: relative; top: 0.1em;">add_circle_outline</i>
+                                Add Bill of Materials
+                            </a>
+                        {% endif %}
+                    <!-- END TOP PANEL -->
+        
+                    <!-- START LISTING -->
+                    <div class="mt-3" >
+                        {% for item in data.bills_of_materials.all %}
+                        <ul>
+                            <li><a href="{% url 'apps.production:bill_of_materials_detail' pk=item.id %}" >{{item.version}} {{item.get_state_display}}</a></li>
+                        </ul>
+                        {% empty %}
+                            None entered
+                        {% endfor %}
+                    </div>
+                    <!-- END LISTING -->
+                    </div>
+                    <div class="hidden" id="tab-characteristics">
+                        <!-- START ALLERGEN INFORMATION -->
+                        <div class="mt-3">
+                            <span class="font-bold">Allergen Information</span>
+            
+                            <ul>
+                                {% if data.characteristics %}
+                                    {{data.characteristics}}
+                                {% else %}
+                                    <li>No allergen information available</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <!-- END ALLERGEN INFORMATION -->
+
+                    </div>
+                    <div class="hidden" id="tab-history">
+                        Sales History
+                    </div>
+                    <div class="hidden" id="tab-inventory">
+                        Inventory
+                    </div>
+                    <div class="hidden" id="tab-accounting">
+                        Accounting Categories
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END TABS (CONTENT) -->
+    </div>
+</div>
+
+<!-- END TABS -->
+
+<script type="text/javascript" src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/tabs.js' %}"></script>
+
+
+
+{% endblock %}

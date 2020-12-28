@@ -1,0 +1,63 @@
+{% load static %}
+
+<div class="flex-0 md:w-48 w-12 z-30" x-data="setup()" >
+
+    {# START SIDEBAR (OVERLAY) #}
+    <div
+        x-show.in.out.opacity="isSidebarOpen"
+        class="fixed inset-0 z-10 bg-black bg-opacity-20 md:hidden"
+        style="backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px)">
+    </div>
+    {# END SIDEBAR (OVERLAY) #}
+
+    {# START SIDEBAR (TRANSITION) #}
+    <aside
+    x-transition:enter="transition transform duration-300"
+    x-transition:enter-start="-translate-x-full opacity-30 ease-in"
+    x-transition:enter-end="translate-x-0 opacity-100 ease-out"
+    x-transition:leave="transition transform duration-300"
+    x-transition:leave-start="translate-x-0 opacity-100 ease-out"
+    x-transition:leave-end="-translate-x-full opacity-0 ease-in"
+    class="fixed inset-y-0 flex-grow flex-col md:w-48 w-12 overflow-hidden transition-all transform bg-gradient-to-b from-steel-800 via-steel-700 to-steel-900"
+    :class="{'w-1/2 z-20': isSidebarOpen}"
+    >
+    {# END SIDEBAR (TRANSITION) #}
+
+    {# START SIDEBAR (TOGGLE BUTTON) #}
+    <div class="flex mt-16 z-30 md:invisible" :class="{'pl-4': isSidebarOpen}">
+        <button
+        class="p-2 text-steel-400 hover:text-white focus:outline-none"
+        style="transition: all 0.15s ease" type="button" x-on:click="toggleSidebarMenu">
+        <span class="sr-only">Open module menu</span>
+        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+    {# END SIDEBAR (TOGGLE BUTTON) #}
+
+    {# START SIDEBAR (CONTENT) #}
+    <div class="flex-grow p-6 z-30 md:block" :class="{'hidden': !isSidebarOpen}" >
+
+    {# START SIDEBAR (APP-SPECIFIC CONTENT) #}
+    <div class="text-lg text-steel-400 font-bold tracking-wide">{{module_name}}</div>
+    <nav class="flex-1 overflow-hidden">
+        <ul class="overflow-hidden">
+        {# START LINKS #}
+        {% for link in app_sidebar_links %}
+        <li>
+            <a href="{% url link.route %}" class="flex items-center py-2 text-sm text-steel-400 hover:text-white" >{{link.label}}</a>
+        </li>
+        {% endfor %}
+        {# END LINKS #}
+        </ul>
+    </nav>
+    {# END SIDEBAR (APP-SPECIFIC CONTENT) #}
+
+    </div>
+    {# END SIDEBAR (CONTENT) #}
+
+    </aside>  
+    {# END SIDEBAR #}
+</div>

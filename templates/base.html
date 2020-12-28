@@ -1,0 +1,51 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include "modules/site-info.html" %} 
+    {% include "modules/styles.html" %}
+  </head>
+
+  <body class="bg-gray-50">
+
+    <div class="min-h-screen flex flex-col">
+    {% include "modules/header.html" %}
+      <main class="flex flex-grow">
+          <div class="flex flex-row w-full">
+            {% include "modules/sidebar.html" %}
+            <div class="flex-grow max-w-5xl mx-auto py-6 lg:px-12 px-8">
+              {% include "modules/messages.html" %}
+              {% block body_block %}
+              {% endblock %}
+            </div>
+
+        </div>
+      </main>
+      {% include "modules/footer.html" %}
+    </div>
+  </body>
+  {# <script type="text/javascript" src="{% static 'js/sidebar.js' %}" charset="utf-8"></script> #}
+  <script>
+    const setup = () => {
+      return {
+        loading: true,
+        isSidebarOpen: false,
+        toggleSidebarMenu() {
+          this.isSidebarOpen = !this.isSidebarOpen;
+        },
+        isAppsPanelOpen: false,
+        isSettingsPanelOpen: false,
+        isProfilePanelOpen: false,
+      };
+    }
+    setup();
+  </script>
+
+</html>
+
+
+
+
+
+
